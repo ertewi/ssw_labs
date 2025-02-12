@@ -5,9 +5,10 @@ import java.io.File;
 import java.util.MissingFormatArgumentException;
 
 public class MainParser {
-    String extra_path = "";
-    String prefix = "";
-    String stat_format = "none";
+    private String currentPath = new File("").getAbsolutePath();
+    private String extra_path = "";
+    private String prefix = "";
+    private String stat_format = "none";
     boolean rewrite_result = true;
 
     public void parse(String[] args) {
@@ -49,9 +50,16 @@ public class MainParser {
 
             } else {
                 String extension = getFileExtension(arg);
+
                 if (extension != null) {
-                    if (extension.equals("txt")) {
-                        // создать обьект для фильтрации содержимого, затем обьект по записи в файлы, предусмотреть возможность буфера
+                    if (extension.equals(".txt")) {
+                        String path = currentPath + File.separator + extra_path;
+                        String file_path = path + arg;
+
+                        Filter filter = new Filter();
+                        Writer writer = new Writer(path, prefix);
+
+                        filter.filter(file_path, writer);
 
                         continue;
                     }
@@ -60,8 +68,6 @@ public class MainParser {
                 throw new UnsupportedOperationException("Unrecognized option: " + arg);
             }
         }
-
-        String currentPath = new File(".").getAbsolutePath();
 
         System.out.println(Arrays.toString(args));
         System.out.println(currentPath);
