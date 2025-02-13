@@ -7,9 +7,6 @@ import java.io.IOException;
 public class Writer {
     private final String prefix;
     private final String path;
-    private FileWriter fwInt;
-    private FileWriter fwFloat;
-    private FileWriter fwString;
 
     Writer(String raw_path, String raw_prefix) {
         prefix = raw_prefix;
@@ -18,13 +15,15 @@ public class Writer {
 
     public void writeInt(String entity) {
         try {
-            if (fwInt == null) {
-                File file = new File(path + prefix + "integers.txt");
+            File file = new File(path + prefix + "integers.txt");
+            if(!file.exists()) {
                 file.createNewFile();
-
-                fwInt = new FileWriter(file);
             }
+
+            FileWriter fwInt = new FileWriter(file, true);
+
             fwInt.write(entity);
+            fwInt.close();
         } catch (IOException ex) {
             System.out.println("Ошибка при создании файла");
             ex.printStackTrace();
@@ -33,13 +32,15 @@ public class Writer {
 
     public void writeFloat(String entity) {
         try {
-            if (fwInt == null) {
-                File file = new File(path + prefix + "floats.txt");
+            File file = new File(path + prefix + "floats.txt");
+            if(!file.exists()) {
                 file.createNewFile();
-
-                fwInt = new FileWriter(file);
             }
-            fwInt.write(entity);
+
+            FileWriter fwFloat = new FileWriter(file, true);
+
+            fwFloat.write(entity);
+            fwFloat.close();
         } catch (IOException ex) {
             System.out.println("Ошибка при создании файла");
             ex.printStackTrace();
@@ -48,22 +49,18 @@ public class Writer {
 
     public void writeString(String entity) {
         try {
-            if (fwInt == null) {
-                File file = new File(path + prefix + "strings.txt");
+            File file = new File(path + prefix + "strings.txt");
+            if(!file.exists()) {
                 file.createNewFile();
-
-                fwInt = new FileWriter(file);
             }
-            fwInt.write(entity);
+
+            FileWriter fwString = new FileWriter(file, true);
+
+            fwString.write(entity);
+            fwString.close();
         } catch (IOException ex) {
             System.out.println("Ошибка при создании файла");
             ex.printStackTrace();
         }
-    }
-
-    protected void finalize() throws Throwable {
-        fwInt.close();
-        fwFloat.close();
-        fwString.close();
     }
 }
